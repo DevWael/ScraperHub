@@ -1,0 +1,24 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: WPForms Cursor General Rules
+globs: 
+alwaysApply: true
+---
+By default use git repository in plugins directory.
+
+# General code style rules:
+- Use tabs instead of spaces for indentation at the beginning of the line.
+- Comments in the code must be in English and end with a period.
+- Write unit tests and e2e tests to ensure code quality.
+- When checking the reason beihind the issues, act as a detective and investigator.
+
+# Core Principles
+- Emphasize object-oriented programming (OOP) for better modularity.
+- Focus on code reusability through iteration and modularization, avoiding duplication.
+- Use descriptive and meaningful functions, variables, and file names.
+- Follow existing project directory naming conventions.
+- Add explicit, descriptive comments to improve code clarity and maintainability.
