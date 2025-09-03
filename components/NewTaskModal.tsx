@@ -70,7 +70,22 @@ const defaultSettings: TaskSettings = {
     'Accept-Encoding': 'gzip, deflate',
     'Connection': 'keep-alive',
     'Upgrade-Insecure-Requests': '1'
-  }
+  },
+  
+  // Crawlee settings
+  crawlerType: 'cheerio' as 'cheerio' | 'playwright' | 'puppeteer',
+  usePlaywright: false,
+  usePuppeteer: false,
+  headless: true,
+  waitForSelector: '',
+  waitForTimeout: 5000,
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+  viewport: { width: 1920, height: 1080 },
+  maxRequestsPerCrawl: 1000,
+  requestHandlerTimeoutSecs: 60,
+  maxConcurrency: 5,
+  maxRequestRetries: 3,
+  additionalMimeTypes: ['text/plain']
 };
 
 export default function NewTaskModal({ isOpen, onClose, onSubmit }: NewTaskModalProps) {

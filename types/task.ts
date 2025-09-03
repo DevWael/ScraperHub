@@ -1,48 +1,70 @@
 export type TaskStatus = 'pending' | 'running' | 'paused' | 'completed' | 'failed' | 'stopped';
 
 export interface TaskSettings {
-  // Scraping settings
-  concurrency: number;
-  timeout: number;
-  maxRetries: number;
-  initialDelay: number;
-  maxDelay: number;
-  maxPages: number;
-  
-  // Output settings
-  format: 'md' | 'html' | 'json';
-  includeMetadata: boolean;
-  includeTimestamps: boolean;
-  downloadImages: boolean;
-  
-  // Content filtering
-  excludePatterns: string[];
-  removeElements: string[];
-  
-  // Image processing
-  convertImagesToLinks: boolean;
-  imageLinkText: 'alt' | 'title' | 'filename' | 'url';
-  
-  // Markdown settings
-  markdown: {
-    headingStyle: 'atx' | 'setext';
-    codeBlockStyle: 'fenced' | 'indented';
-    emDelimiter: '*' | '_';
-    bulletListMarker: '-' | '+' | '*';
-    strongDelimiter: '**' | '__';
-  };
-  
-  // Progress and state
-  showProgress: boolean;
-  saveStateInterval: number;
-  logErrors: boolean;
-  continueOnError: boolean;
-  
-  // Headers
-  headers: Record<string, string>;
-  
-  // Notifications
-  webhook?: string;
+	// Scraping settings
+	concurrency: number;
+	timeout: number;
+	maxRetries: number;
+	initialDelay: number;
+	maxDelay: number;
+	maxPages: number;
+	
+	// Crawlee-specific settings
+	crawlerType: 'cheerio' | 'playwright' | 'puppeteer';
+	usePlaywright: boolean;
+	usePuppeteer: boolean;
+	headless: boolean;
+	
+	// Advanced Crawlee options
+	maxRequestsPerCrawl: number;
+	maxConcurrency: number;
+	requestHandlerTimeoutSecs: number;
+	maxRequestRetries: number;
+	additionalMimeTypes: string[];
+	
+	// Browser-specific settings
+	waitForSelector?: string;
+	waitForTimeout?: number;
+	viewport?: {
+		width: number;
+		height: number;
+	};
+	userAgent?: string;
+	
+	// Output settings
+	format: 'md' | 'html' | 'json';
+	includeMetadata: boolean;
+	includeTimestamps: boolean;
+	downloadImages: boolean;
+	
+	// Content filtering
+	excludePatterns: string[];
+	removeElements: string[];
+	
+	// Image processing
+	convertImagesToLinks: boolean;
+	imageLinkText: 'alt' | 'title' | 'filename' | 'url';
+	
+	// Markdown settings
+	markdown: {
+		headingStyle: 'atx' | 'setext';
+		codeBlockStyle: 'fenced' | 'indented';
+		emDelimiter: '*' | '_';
+		bulletListMarker: '-' | '+' | '*';
+		strongDelimiter: '**' | '__';
+	};
+	
+	// Progress and state
+	showProgress: boolean;
+	saveStateInterval: number;
+	logErrors: boolean;
+	continueOnError: boolean;
+	
+	// Headers
+	headers: Record<string, string>;
+	
+	// Notifications
+	webhook?: string;
 }
 
 export interface TaskProgress {

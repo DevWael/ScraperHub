@@ -1,0 +1,9 @@
+{
+	"id": "EAaArVRs5qV39C9",
+	"json": "{\"id\":\"EAaArVRs5qV39C9\",\"url\":\"https://example.com\",\"loadedUrl\":\"https://example.com/\",\"uniqueKey\":\"https://example.com\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{\"Accept\":\"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\",\"Accept-Language\":\"en-US,en;q=0.5\",\"Accept-Encoding\":\"gzip, deflate\",\"Connection\":\"keep-alive\",\"Upgrade-Insecure-Requests\":\"1\"},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2025-09-03T17:09:16.022Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://example.com",
+	"url": "https://example.com"
+}
