@@ -20,12 +20,45 @@ const activeTasks = global.activeTasks;
 export async function POST(request: NextRequest) {
   try {
     const body: CreateTaskRequest = await request.json();
-    const { url, settings } = body;
+    let { url, settings } = body;
+
+    // Normalize URL by adding protocol if missing
+    if (url) {
+      // Remove any leading/trailing whitespace
+      url = url.trim();
+      
+      // Handle special cases first
+      if (url === 'localhost' || url.startsWith('localhost:')) {
+        // Localhost should use http by default
+        if (!url.startsWith('http')) {
+          url = 'http://' + url;
+        }
+      } else if (url.match(/^\d+\.\d+\.\d+\.\d+/)) {
+        // IP addresses should use http by default
+        if (!url.startsWith('http')) {
+          url = 'http://' + url;
+        }
+      } else if (!url.match(/^https?:\/\//)) {
+        // All other URLs get https by default
+        url = 'https://' + url;
+      }
+      
+      // Validate URL format
+      try {
+        new URL(url);
+      } catch (e) {
+        // If URL parsing fails, return error
+        return NextResponse.json(
+          { error: 'Invalid URL format provided' },
+          { status: 400 }
+        );
+      }
+    }
 
     // Validate URL
-    if (!url || !url.startsWith('http')) {
+    if (!url) {
       return NextResponse.json(
-        { error: 'Invalid URL provided' },
+        { error: 'URL is required' },
         { status: 400 }
       );
     }
@@ -101,7 +134,14 @@ export async function POST(request: NextRequest) {
     const path = require('path');
     
     const crawlerPath = path.join(process.cwd(), 'lib', 'crawler.js');
-    const outputDir = path.join(process.cwd(), 'data', 'tasks', `${taskId}_run_${runNumber}`);
+    
+    // Create output directory structure: data/tasks/domain/date_time/
+    const urlObj = new URL(url);
+    const baseDomain = urlObj.hostname;
+    const baseDirName = baseDomain.replace(/\./g, '_');
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19); // Format: YYYY-MM-DDTHH-MM-SS
+    const outputDir = path.join(process.cwd(), 'data', 'tasks', baseDirName, timestamp);
+    
     const child = spawn('node', [crawlerPath, '--url', url, '--output', outputDir, '--format', 'md'], {
       stdio: ['pipe', 'pipe', 'pipe'],
       cwd: process.cwd()

@@ -3,10 +3,10 @@ import { taskRunOperations } from '@/lib/database';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const taskId = params.id;
+    const { id: taskId } = await params;
     
     // Get all runs for this task
     const runs = taskRunOperations.getByTaskId.all(taskId);

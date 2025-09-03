@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const tasks = taskOperations.getAll.all();
     
     // Transform the data to match frontend expectations
-    const transformedTasks = tasks.map(task => ({
+    const transformedTasks = tasks.map((task: any) => ({
       ...task,
       settings: JSON.parse(task.settings),
       // Map database fields to frontend fields

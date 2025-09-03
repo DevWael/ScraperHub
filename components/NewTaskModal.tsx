@@ -18,7 +18,7 @@ const defaultSettings: TaskSettings = {
   maxRetries: 3,
   initialDelay: 1000,
   maxDelay: 60000,
-  maxPages: 1000,
+  maxPages: 1000000,
   
   // Output settings
   format: 'md',
@@ -70,7 +70,20 @@ const defaultSettings: TaskSettings = {
     'Accept-Encoding': 'gzip, deflate',
     'Connection': 'keep-alive',
     'Upgrade-Insecure-Requests': '1'
-  }
+  },
+  
+  // Crawler settings
+  crawlerType: 'cheerio' as 'cheerio',
+  usePlaywright: false,
+  usePuppeteer: false,
+  headless: true,
+  waitForSelector: '',
+  waitForTimeout: 5000,
+  maxRequestsPerCrawl: 1000,
+  requestHandlerTimeoutSecs: 60,
+  maxConcurrency: 5,
+  maxRequestRetries: 3,
+  additionalMimeTypes: ['text/plain']
 };
 
 export default function NewTaskModal({ isOpen, onClose, onSubmit }: NewTaskModalProps) {

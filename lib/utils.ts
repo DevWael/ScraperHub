@@ -28,9 +28,20 @@ export function ensureDirectoryExists(dirPath: string): void {
 
 /**
  * Get the output directory path for a task
+ * Note: This function is kept for backward compatibility but the new structure
+ * uses domain/date_time format instead of taskId_run_number
  */
 export function getTaskOutputDir(taskId: string, runNumber: number): string {
   return path.join(process.cwd(), 'data', 'tasks', `${taskId}_run_${runNumber}`);
+}
+
+/**
+ * Get the output directory path for a task using the new domain/date_time structure
+ */
+export function getNewTaskOutputDir(domain: string, timestamp?: string): string {
+  const baseDirName = domain.replace(/\./g, '_');
+  const dateTime = timestamp || new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  return path.join(process.cwd(), 'data', 'tasks', baseDirName, dateTime);
 }
 
 /**
@@ -49,6 +60,40 @@ export function isValidUrl(url: string): boolean {
     return url.startsWith('http');
   } catch {
     return false;
+  }
+}
+
+/**
+ * Normalize URL by adding protocol if missing
+ * Handles various input formats like domain names, IP addresses, localhost, etc.
+ */
+export function normalizeUrl(inputUrl: string): string {
+  if (!inputUrl) return inputUrl;
+  
+  let url = inputUrl.trim();
+  
+  // Handle special cases first
+  if (url === 'localhost' || url.startsWith('localhost:')) {
+    // Localhost should use http by default
+    if (!url.startsWith('http')) {
+      url = 'http://' + url;
+    }
+  } else if (url.match(/^\d+\.\d+\.\d+\.\d+/)) {
+    // IP addresses should use http by default
+    if (!url.startsWith('http')) {
+      url = 'http://' + url;
+    }
+  } else if (!url.match(/^https?:\/\//)) {
+    // All other URLs get https by default
+    url = 'https://' + url;
+  }
+  
+  // Validate the normalized URL
+  try {
+    new URL(url);
+    return url;
+  } catch (e) {
+    throw new Error('Invalid URL format provided');
   }
 }
 

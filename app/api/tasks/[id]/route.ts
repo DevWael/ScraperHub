@@ -3,10 +3,10 @@ import { taskOperations, taskRunOperations, scrapedPageOperations, db } from '@/
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const taskId = params.id;
+    const { id: taskId } = await params;
     
     // Get task details
     const task = taskOperations.getById.get(taskId);
@@ -22,9 +22,9 @@ export async function GET(
     
     // Get scraped pages for the latest run
     const latestRun = runs[0];
-    let scrapedPages = [];
+    let scrapedPages: any[] = [];
     if (latestRun) {
-      scrapedPages = scrapedPageOperations.getByRunId.all(latestRun.id);
+      scrapedPages = scrapedPageOperations.getByRunId.all((latestRun as any).id);
     }
 
     // Get task statistics
@@ -33,12 +33,12 @@ export async function GET(
     return NextResponse.json({
       task: {
         ...task,
-        settings: JSON.parse(task.settings),
+        settings: JSON.parse((task as any).settings),
         // Map database fields to frontend fields for consistency
-        pagesScraped: task.scrapedUrls || 0,
-        pagesFailed: task.failedUrls || 0,
-        imagesDownloaded: task.downloadedImages || 0,
-        totalUrls: task.totalUrls || 0
+        pagesScraped: (task as any).scrapedUrls || 0,
+        pagesFailed: (task as any).failedUrls || 0,
+        imagesDownloaded: (task as any).downloadedImages || 0,
+        totalUrls: (task as any).totalUrls || 0
       },
       runs,
       scrapedPages,
@@ -59,10 +59,10 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const taskId = params.id;
+    const { id: taskId } = await params;
     
     // Check if task exists
     const task = taskOperations.getById.get(taskId);
