@@ -124,48 +124,6 @@ web-scraper-dashboard/
     └── rules/            # Cursor rules and guidelines
 ```
 
-## 🧪 Testing
-
-### Run Tests
-
-```bash
-# Run all tests
-npm test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Run tests with coverage (use Jest directly)
-npx jest --coverage
-```
-
-### Test Structure
-
-- **Unit Tests**: Test individual functions and utilities
-- **Component Tests**: Test React component behavior
-- **Integration Tests**: Test API routes and workflows
-
-## 🎨 Development Standards
-
-This project follows strict development standards defined in `.cursor/rules/general.mdc`:
-
-### Code Quality
-- **TypeScript**: Strict typing, no `any` types
-- **SOLID Principles**: Single responsibility, dependency injection
-- **Error Handling**: Comprehensive error handling
-- **Performance**: Optimized rendering and state management
-
-### File Organization
-- **Components**: One component per file, PascalCase naming
-- **API Routes**: RESTful endpoints with proper error handling
-- **Types**: Descriptive interfaces and types
-- **Utilities**: Reusable functions with JSDoc documentation
-
-### Testing
-- **Unit Tests**: All utility functions tested
-- **Component Tests**: Behavior testing, not implementation
-- **Integration Tests**: API and workflow testing
-
 ## 🔧 Configuration
 
 ### Task Settings
