@@ -1,55 +1,45 @@
-// Use CommonJS for compatibility with API routes
-const { Server } = require('socket.io');
-
-// Global Socket.IO server instance
-let io = undefined;
+// Socket.IO server utilities for the unified server
+let io: any = undefined;
 
 function initializeSocketServer() {
-	if (io) {
+	// In the unified server approach, io is available globally
+	if ((global as any).io) {
+		io = (global as any).io;
 		return io;
 	}
-
-	try {
-		// Try to get the standalone server
-		const { io: standaloneIo } = require('../socket-server.js');
-		if (standaloneIo) {
-			io = standaloneIo;
-			return io;
-		} else {
-			// Standalone Socket.IO server not available
-			return undefined;
-		}
-	} catch (error) {
-		const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-		// Socket.IO server not running or not accessible
-		return undefined;
-	}
+	return undefined;
 }
 
 function getSocketServer() {
+	if (!io) {
+		initializeSocketServer();
+	}
 	return io;
 }
 
 function emitToAll(event: string, data: any) {
-	if (!io) {
-		// Try to initialize if not already done
-		initializeSocketServer();
-	}
-	
-	if (io) {
+	const socketIO = getSocketServer();
+	if (socketIO) {
 		try {
-			io.emit(event, data);
+			socketIO.emit(event, data);
 		} catch (error) {
-			// Failed to emit event
+			console.error('Failed to emit event:', error);
 		}
 	} else {
-		// Socket.IO server not available, cannot emit
+		console.warn('Socket.IO server not available, cannot emit event:', event);
 	}
 }
 
 function emitToRoom(room: string, event: string, data: any) {
-	if (io) {
-		io.to(room).emit(event, data);
+	const socketIO = getSocketServer();
+	if (socketIO) {
+		try {
+			socketIO.to(room).emit(event, data);
+		} catch (error) {
+			console.error('Failed to emit to room:', error);
+		}
+	} else {
+		console.warn('Socket.IO server not available, cannot emit to room:', room);
 	}
 }
 

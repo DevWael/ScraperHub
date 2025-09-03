@@ -3,14 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node server.js",
     "lint": "next lint",
     "test": "jest",
-    "test:watch": "jest --watch",
-    "socket": "node socket-server.js",
-    "dev:full": "concurrently \"npm run dev\" \"npm run socket\""
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",

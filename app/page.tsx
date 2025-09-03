@@ -77,14 +77,15 @@ export default function Dashboard() {
     // Load tasks from database
     loadTasks();
 
-    const socket = io('http://localhost:3001', {
+    const socket = io('http://localhost:3000', {
       transports: ['websocket', 'polling'],
       timeout: 20000,
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
       forceNew: true, // Force a new connection
-      autoConnect: true
+      autoConnect: true,
+      path: '/api/socket'
     });
 
 
@@ -393,7 +394,9 @@ export default function Dashboard() {
               </button>
               <button
                 onClick={() => {
-                  const socket = io('http://localhost:3001');
+                  	const socket = io('http://localhost:3000', {
+		path: '/api/socket'
+	});
                   
                   socket.on('connect', () => {
                     socket.emit('test-client', { message: 'Test from browser!' });

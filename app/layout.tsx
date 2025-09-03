@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
-import '@/lib/socket-init';
+// Socket.IO is now handled by the unified server in server.js
 
 const inter = Inter({ subsets: ['latin'] });
 

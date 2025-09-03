@@ -16,7 +16,7 @@ if (!global.activeTasks) {
 
 const activeTasks = global.activeTasks;
 
-// Socket.IO server is initialized via socket-init import
+// Socket.IO server is now handled by the unified server in server.js
 
 export async function POST(request: NextRequest) {
   try {

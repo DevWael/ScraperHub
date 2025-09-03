@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { CreateTaskRequest, TaskUpdate } from '@/types/task';
 import { taskOperations, taskRunOperations, scrapedPageOperations } from '@/lib/database';
 import { v4 as uuidv4 } from 'uuid';
-import { emitToAll } from '@/lib/socket-server';
+import { socketUtils } from '@/lib/socket-utils';
 
 // In-memory storage for active tasks (for real-time updates)
 declare global {
@@ -15,7 +15,7 @@ if (!global.activeTasks) {
 
 const activeTasks = global.activeTasks;
 
-// Socket.IO server is initialized via socket-init import
+// Socket.IO server is now handled by the unified server in server.js
 
 export async function POST(request: NextRequest) {
   try {
@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
     );
 
     // Emit task started event
-    emitToAll('task:started', { taskId, url });
+    socketUtils.emitTaskStarted(taskId);
 
     // Start scraping in background using child process
     const { spawn } = require('child_process');
@@ -191,7 +191,7 @@ export async function POST(request: NextRequest) {
               estimatedRemaining: progressData.estimatedRemaining
             };
             
-            emitToAll('task:progress', socketData);
+            socketUtils.emitTaskProgress(taskId, socketData);
           } catch (e) {
             // Failed to parse progress update
           }
@@ -251,7 +251,7 @@ export async function POST(request: NextRequest) {
         );
 
         activeTasks.delete(taskId);
-        emitToAll('task:completed', taskUpdate);
+        socketUtils.emitTaskCompleted(taskId, taskUpdate);
       } else {
         // Failed
         const taskUpdate: TaskUpdate = {
@@ -291,7 +291,7 @@ export async function POST(request: NextRequest) {
         );
 
         activeTasks.delete(taskId);
-        emitToAll('task:failed', taskUpdate);
+        socketUtils.emitTaskFailed(taskId, taskUpdate.error || 'Unknown error');
       }
     });
 

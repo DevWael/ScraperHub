@@ -15,6 +15,7 @@ By default use git repository in plugins directory.
 - Comments in the code must be in English and end with a period.
 - Write unit tests and e2e tests to ensure code quality.
 - When checking the reason beihind the issues, act as a detective and investigator.
+- Dont write MD documents until asked.
 
 # Core Principles
 - Emphasize object-oriented programming (OOP) for better modularity.
