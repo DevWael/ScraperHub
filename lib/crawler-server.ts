@@ -1,7 +1,6 @@
 // Server-side only crawler import
 // This file should never be imported on the client side
 
-import CrawleeCrawler from './crawlee-crawler';
 import { TaskSettings } from '@/types/task';
 import path from 'path';
 
@@ -19,22 +18,19 @@ export async function crawl(url: string, settings: TaskSettings, outputDir: stri
 			finalOutputDir = path.join('data', 'tasks', baseDirName, timestamp);
 		}
 		
-		// Initialize the Crawlee crawler
-		const crawler = new CrawleeCrawler({
-			url,
-			settings,
+		// TODO: Implement alternative crawler logic here
+		// For now, return a placeholder result
+		const result = {
+			domain: baseDomain,
+			totalPages: 0,
+			successfulPages: 0,
+			failedPages: 0,
+			downloadedImages: 0,
 			outputDir: finalOutputDir,
-			onProgress,
-			onComplete: (result) => {
-				console.log('Crawling completed:', result);
-			},
-			onError: (error) => {
-				console.error('Crawling error:', error);
-			}
-		});
+			scrapingTime: 0,
+			sitemap: []
+		};
 		
-		// Start crawling
-		const result = await crawler.start();
 		return result;
 		
 	} catch (error) {

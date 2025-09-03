@@ -9,20 +9,20 @@ export interface TaskSettings {
 	maxDelay: number;
 	maxPages: number;
 	
-	// Crawlee-specific settings
-	crawlerType: 'cheerio' | 'playwright' | 'puppeteer';
-	usePlaywright: boolean;
-	usePuppeteer: boolean;
-	headless: boolean;
+	// Crawler settings
+	crawlerType: 'cheerio';
+	usePlaywright: false;
+	usePuppeteer: false;
+	headless: true;
 	
-	// Advanced Crawlee options
+	// Advanced crawler options
 	maxRequestsPerCrawl: number;
 	maxConcurrency: number;
 	requestHandlerTimeoutSecs: number;
 	maxRequestRetries: number;
 	additionalMimeTypes: string[];
 	
-	// Browser-specific settings
+	// Browser-specific settings (deprecated - kept for compatibility)
 	waitForSelector?: string;
 	waitForTimeout?: number;
 	viewport?: {

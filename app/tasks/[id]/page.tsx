@@ -16,9 +16,9 @@ interface TaskDetails {
   createdAt: string;
   updatedAt: string;
   totalUrls: number;
-  scrapedUrls: number;
-  failedUrls: number;
-  downloadedImages: number;
+  pagesScraped: number;
+  pagesFailed: number;
+  imagesDownloaded: number;
   outputDir: string;
   error: string;
 }

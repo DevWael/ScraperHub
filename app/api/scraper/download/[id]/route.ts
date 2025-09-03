@@ -12,10 +12,11 @@ import {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
-    const taskId = params.id;
+    const taskId = id;
     
     // Get task details
     const task = taskOperations.getById.get(taskId);
@@ -27,7 +28,7 @@ export async function GET(
     }
 
     // Check if task can be downloaded
-    if (!canDownloadTask(task)) {
+    if (!canDownloadTask(task as any)) {
       return NextResponse.json(
         { error: 'Task is not completed or output not found' },
         { status: 400 }
@@ -41,7 +42,7 @@ export async function GET(
     ensureDirectoryExists(getDownloadsDir());
 
     // Create zip file
-    await createZipFromDirectory(task.outputDir!, zipPath);
+    await createZipFromDirectory((task as any).outputDir!, zipPath);
 
     // Return the zip file
     const fileStream = createReadStream(zipPath);
