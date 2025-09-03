@@ -91,6 +91,9 @@ export default function Dashboard() {
 
 
     socket.on('task:started', (data) => {
+      // JOIN THE TASK ROOM for real-time updates
+      socket.emit('join-task', data.taskId);
+      
       // Reload tasks to get the new task
       loadTasks();
     });
