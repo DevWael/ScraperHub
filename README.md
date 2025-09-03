@@ -47,7 +47,7 @@ A modern, real-time web scraping dashboard built with Next.js, TypeScript, and S
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone <git@github.com:DevWael/ScraperHub.git>
 cd web-scraper-dashboard
 ```
 
