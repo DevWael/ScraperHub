@@ -1,4 +1,4 @@
-# Web Scraper Dashboard
+# ScraperHub
 
 A modern, real-time web scraping dashboard built with Next.js, TypeScript, and Socket.IO. Features advanced scraping capabilities with real-time progress monitoring, task management, and comprehensive analytics.
 
@@ -48,7 +48,7 @@ A modern, real-time web scraping dashboard built with Next.js, TypeScript, and S
 
 ```bash
 git clone <repository-url>
-cd web-scraper-dashboard
+cd scraperhub
 ```
 
 ### 2. Install Dependencies
@@ -104,7 +104,7 @@ The Socket.IO server will be available at `http://localhost:3001`
 ## 📁 Project Structure
 
 ```
-web-scraper-dashboard/
+scraperhub/
 ├── app/                    # Next.js App Router
 │   ├── api/               # API routes
 │   ├── globals.css        # Global styles
