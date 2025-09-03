@@ -1,4 +1,4 @@
-# ScraperHub
+# Web Scraper Dashboard
 
 A modern, real-time web scraping dashboard built with Next.js, TypeScript, and Socket.IO. Features advanced scraping capabilities with real-time progress monitoring, task management, and comprehensive analytics.
 
@@ -10,7 +10,7 @@ A modern, real-time web scraping dashboard built with Next.js, TypeScript, and S
 - **Task Management**: Create, pause, resume, and manage scraping tasks
 - **Task History**: View complete history of all task runs
 - **Download Results**: Download scraping results as ZIP files
-- **Dark Mode Support**: Automatic theme switching based on OS preferences
+
 
 ### User Interface
 - **Modern Dashboard**: Clean, responsive design with Tailwind CSS
@@ -32,7 +32,7 @@ A modern, real-time web scraping dashboard built with Next.js, TypeScript, and S
 - **Styling**: Tailwind CSS, Framer Motion
 - **Real-time**: Socket.IO
 - **Database**: SQLite with Better-SQLite3
-- **Testing**: Jest, React Testing Library
+- **Testing**: Jest
 - **Build Tool**: Next.js (Webpack)
 - **Package Manager**: npm
 
@@ -47,8 +47,8 @@ A modern, real-time web scraping dashboard built with Next.js, TypeScript, and S
 ### 1. Clone the Repository
 
 ```bash
-git clone <git@github.com:DevWael/ScraperHub.git>
-cd scraperhub
+git clone <repository-url>
+cd web-scraper-dashboard
 ```
 
 ### 2. Install Dependencies
@@ -65,46 +65,29 @@ Create a `.env.local` file in the root directory:
 # Database
 DATABASE_URL=./data/scraper.db
 
-# Socket.IO
-SOCKET_PORT=3001
-
 # Development
 NODE_ENV=development
 ```
 
-### 4. Initialize Database
+### 4. Database Setup
+
+The database is automatically initialized when you start the application. No manual setup required.
+
+### 5. Start Development Server
+
+The development server runs both the Next.js application and Socket.IO server together:
 
 ```bash
-npm run db:init
-```
-
-### 5. Start Development Servers
-
-#### Option 1: Start both servers together (Recommended)
-```bash
-# Using the startup script
-./start-dev.sh
-
-# Or using npm directly
-npm run dev:full
-```
-
-#### Option 2: Start servers separately
-```bash
-# Terminal 1: Start Next.js development server
 npm run dev
-
-# Terminal 2: Start Socket.IO server
-npm run socket
 ```
 
 The application will be available at `http://localhost:3000`
-The Socket.IO server will be available at `http://localhost:3001`
+The Socket.IO server will be available at `http://localhost:3000` (integrated with Next.js)
 
 ## 📁 Project Structure
 
 ```
-scraperhub/
+web-scraper-dashboard/
 ├── app/                    # Next.js App Router
 │   ├── api/               # API routes
 │   ├── globals.css        # Global styles
@@ -116,21 +99,29 @@ scraperhub/
 │   ├── TaskDetailsModal.tsx # Task details view
 │   ├── TaskHistoryModal.tsx # Task history view
 │   ├── TaskSettingsModal.tsx # Task settings
-│   ├── StatisticsPanel.tsx # Statistics dashboard
-│   ├── ThemeProvider.tsx  # Dark mode provider
-│   └── ThemeToggle.tsx    # Theme toggle button
-├── lib/                   # Utility functions
+│   └── StatisticsPanel.tsx # Statistics dashboard
+├── lib/                   # Utility functions and server logic
 │   ├── database.ts        # Database operations
-│   ├── socket-server.ts   # Socket.IO server
+│   ├── socket-server.ts   # Socket.IO server utilities
+│   ├── socket-utils.ts    # Socket.IO client utilities
+│   ├── crawler-server.ts  # Crawler server integration
+│   ├── crawler.js         # Web crawler implementation
+│   ├── config.js          # Configuration management
 │   ├── utils.ts           # Utility functions
 │   └── utils.test.ts      # Unit tests
 ├── types/                 # TypeScript types
-│   └── task.ts           # Task-related types
+│   ├── task.ts           # Task-related types
+│   └── socket.ts         # Socket.IO types
 ├── data/                  # Data storage
-│   ├── downloads/         # Downloaded files
-│   ├── tasks/            # Task outputs
+│   ├── tasks/            # Task outputs and scraped data
 │   └── scraper.db        # SQLite database
-└── .cursorrules          # Development standards
+├── server.js              # Unified Next.js and Socket.IO server
+├── next.config.js         # Next.js configuration
+├── tailwind.config.js     # Tailwind CSS configuration
+├── jest.config.js         # Jest testing configuration
+├── tsconfig.json          # TypeScript configuration
+└── .cursor/               # Development standards
+    └── rules/            # Cursor rules and guidelines
 ```
 
 ## 🧪 Testing
@@ -144,8 +135,8 @@ npm test
 # Run tests in watch mode
 npm run test:watch
 
-# Run tests with coverage
-npm run test:coverage
+# Run tests with coverage (use Jest directly)
+npx jest --coverage
 ```
 
 ### Test Structure
@@ -156,7 +147,7 @@ npm run test:coverage
 
 ## 🎨 Development Standards
 
-This project follows strict development standards defined in `.cursorrules`:
+This project follows strict development standards defined in `.cursor/rules/general.mdc`:
 
 ### Code Quality
 - **TypeScript**: Strict typing, no `any` types
@@ -205,7 +196,6 @@ interface TaskSettings {
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `DATABASE_URL` | SQLite database path | `./data/scraper.db` |
-| `SOCKET_PORT` | Socket.IO server port | `3001` |
 | `NODE_ENV` | Environment mode | `development` |
 
 ## 🚀 Deployment
@@ -233,7 +223,7 @@ RUN npm ci --only=production
 COPY . .
 RUN npm run build
 
-EXPOSE 3000 3001
+EXPOSE 3000
 
 CMD ["npm", "start"]
 ```
@@ -309,7 +299,7 @@ Content-Type: application/json
 
 ### Development Guidelines
 
-- Follow the `.cursorrules` file for code standards
+- Follow the `.cursor/rules/general.mdc` file for code standards
 - Write tests for new features
 - Update documentation as needed
 - Use conventional commit messages
@@ -332,20 +322,20 @@ For support and questions:
 
 If you see Socket.IO connection errors in the console:
 
-1. **Make sure both servers are running:**
+1. **Make sure the development server is running:**
    ```bash
-   # Check if Socket.IO server is running
-   curl http://localhost:3001
+   # Check if the server is running
+   curl http://localhost:3000
    ```
 
-2. **Restart both servers:**
+2. **Restart the development server:**
    ```bash
-   # Stop all processes and restart
-   npm run dev:full
+   # Stop the server and restart
+   npm run dev
    ```
 
 3. **Check firewall settings:**
-   - Ensure port 3001 is not blocked
+   - Ensure port 3000 is not blocked
    - Check if antivirus software is blocking the connection
 
 4. **Clear browser cache:**
@@ -357,8 +347,8 @@ If you see Socket.IO connection errors in the console:
 If real-time updates are not working:
 
 1. **Check browser console for errors**
-2. **Verify Socket.IO server is running on port 3001**
-3. **Check network connectivity between frontend and Socket.IO server**
+2. **Verify the development server is running on port 3000**
+3. **Check network connectivity between frontend and server**
 4. **Ensure no CORS issues (server should allow localhost:3000)**
 
 ### Database Issues
@@ -376,7 +366,7 @@ If you encounter database errors:
    rm -f data/scraper.db
    
    # Restart the application
-   npm run dev:full
+   npm run dev
    ```
 
 ## 🔄 Changelog
@@ -385,6 +375,6 @@ If you encounter database errors:
 - Initial release
 - Real-time web scraping dashboard
 - Task management system
-- Dark mode support
+
 - Comprehensive testing
 - SOLID principles implementation

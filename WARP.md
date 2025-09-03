@@ -13,15 +13,11 @@ This is a **Web Scraper Dashboard**, a modern Next.js application that provides 
 
 ### Development
 ```bash
-# Start both Next.js and Socket.IO servers (recommended)
-npm run dev:full
+# Start both Next.js and Socket.IO servers (integrated)
+npm run dev
 
-# Start servers separately
-npm run dev          # Next.js dev server (port 3000)
-npm run socket       # Socket.IO server (port 3001)
-
-# Start with convenience script
-./start-dev.sh
+# Note: start-dev.sh script and separate socket server do not exist
+# The Socket.IO server is integrated with the Next.js server on port 3000
 ```
 
 ### Building & Production
@@ -35,7 +31,7 @@ npm run lint        # Run ESLint
 ```bash
 npm test            # Run Jest tests
 npm run test:watch  # Run tests in watch mode
-npm run test:coverage # Run tests with coverage
+npx jest --coverage # Run tests with coverage
 ```
 
 ### Database
@@ -45,7 +41,7 @@ Database is automatically initialized on startup (SQLite with better-sqlite3). N
 
 ### Component Structure
 - **Frontend**: Next.js 14 with App Router, TypeScript, Tailwind CSS
-- **Real-time Communication**: Standalone Socket.IO server (port 3001)
+- **Real-time Communication**: Integrated Socket.IO server (port 3000)
 - **Database**: SQLite with better-sqlite3 for task persistence
 - **Task Processing**: Child processes spawning Node.js crawler instances
 - **API Layer**: Next.js API routes handling CRUD operations
@@ -59,7 +55,7 @@ Browser (React) ←→ Socket.IO Client ←→ Socket.IO Server ←→ API Route
                                     Child Process (Crawler)
 ```
 
-- **Socket.IO Server**: Standalone server (`socket-server.js`) handles real-time events
+- **Socket.IO Server**: Integrated server handles real-time events on the same port as Next.js
 - **API Routes**: RESTful endpoints in `app/api/` manage task lifecycle
 - **Task Processing**: Child processes execute the crawler with live progress updates
 - **Database**: SQLite stores tasks, runs, and scraped pages with foreign key relationships
@@ -126,7 +122,7 @@ types/                 # TypeScript definitions
 ### Key Integrations
 
 #### Socket.IO Integration
-- **Standalone Server**: Runs on port 3001 independently of Next.js
+- **Integrated Server**: Runs on port 3000 integrated with Next.js
 - **Event System**: Real-time task updates (`task:started`, `task:progress`, `task:completed`, `task:failed`)
 - **Connection Management**: Auto-reconnection with exponential backoff
 - **Server Integration**: API routes emit Socket.IO events for live updates
@@ -188,7 +184,7 @@ types/                 # TypeScript definitions
 - **Unit Tests**: All utility functions in `lib/utils.ts` have comprehensive Jest tests
 - **Component Tests**: React components tested for behavior, not implementation
 - **Integration Tests**: API endpoints tested end-to-end
-- **Coverage**: Run `npm run test:coverage` to ensure adequate test coverage
+- **Coverage**: Run `npx jest --coverage` to ensure adequate test coverage
 
 ### Error Handling Patterns
 - **API Routes**: Consistent error response format with appropriate HTTP status codes
