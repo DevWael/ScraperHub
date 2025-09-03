@@ -18,7 +18,7 @@ const defaultSettings: TaskSettings = {
   maxRetries: 3,
   initialDelay: 1000,
   maxDelay: 60000,
-  maxPages: 1000,
+  maxPages: 1000000,
   
   // Output settings
   format: 'md',
