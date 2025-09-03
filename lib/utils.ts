@@ -64,6 +64,40 @@ export function isValidUrl(url: string): boolean {
 }
 
 /**
+ * Normalize URL by adding protocol if missing
+ * Handles various input formats like domain names, IP addresses, localhost, etc.
+ */
+export function normalizeUrl(inputUrl: string): string {
+  if (!inputUrl) return inputUrl;
+  
+  let url = inputUrl.trim();
+  
+  // Handle special cases first
+  if (url === 'localhost' || url.startsWith('localhost:')) {
+    // Localhost should use http by default
+    if (!url.startsWith('http')) {
+      url = 'http://' + url;
+    }
+  } else if (url.match(/^\d+\.\d+\.\d+\.\d+/)) {
+    // IP addresses should use http by default
+    if (!url.startsWith('http')) {
+      url = 'http://' + url;
+    }
+  } else if (!url.match(/^https?:\/\//)) {
+    // All other URLs get https by default
+    url = 'https://' + url;
+  }
+  
+  // Validate the normalized URL
+  try {
+    new URL(url);
+    return url;
+  } catch (e) {
+    throw new Error('Invalid URL format provided');
+  }
+}
+
+/**
  * Format a URL for display (show hostname + pathname)
  */
 export function formatUrlForDisplay(url: string): string {

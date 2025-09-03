@@ -20,12 +20,45 @@ const activeTasks = global.activeTasks;
 export async function POST(request: NextRequest) {
   try {
     const body: CreateTaskRequest = await request.json();
-    const { url, settings } = body;
+    let { url, settings } = body;
+
+    // Normalize URL by adding protocol if missing
+    if (url) {
+      // Remove any leading/trailing whitespace
+      url = url.trim();
+      
+      // Handle special cases first
+      if (url === 'localhost' || url.startsWith('localhost:')) {
+        // Localhost should use http by default
+        if (!url.startsWith('http')) {
+          url = 'http://' + url;
+        }
+      } else if (url.match(/^\d+\.\d+\.\d+\.\d+/)) {
+        // IP addresses should use http by default
+        if (!url.startsWith('http')) {
+          url = 'http://' + url;
+        }
+      } else if (!url.match(/^https?:\/\//)) {
+        // All other URLs get https by default
+        url = 'https://' + url;
+      }
+      
+      // Validate URL format
+      try {
+        new URL(url);
+      } catch (e) {
+        // If URL parsing fails, return error
+        return NextResponse.json(
+          { error: 'Invalid URL format provided' },
+          { status: 400 }
+        );
+      }
+    }
 
     // Validate URL
-    if (!url || !url.startsWith('http')) {
+    if (!url) {
       return NextResponse.json(
-        { error: 'Invalid URL provided' },
+        { error: 'URL is required' },
         { status: 400 }
       );
     }
