@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     const { taskId } = body;
 
     // Get the original task
-    const originalTask = taskOperations.getById.get(taskId);
+    const originalTask = taskOperations.getById.get(taskId) as any;
     if (!originalTask) {
       return NextResponse.json(
         { error: 'Task not found' },
@@ -209,11 +209,12 @@ export async function POST(request: NextRequest) {
       const task = activeTasks.get(taskId);
       
       if (code === 0) {
-        // Success
+        // Success - use actual progress from crawler, but ensure it's at least 100% if completed
+        const finalProgress = Math.max(task?.progress || 0, 100);
         const taskUpdate: TaskUpdate = {
           taskId,
           status: 'completed',
-          progress: 100,
+          progress: finalProgress,
           pagesScraped: task?.scrapedUrls || 0,
           pagesFailed: task?.failedUrls || 0,
           imagesDownloaded: task?.downloadedImages || 0,
@@ -224,7 +225,7 @@ export async function POST(request: NextRequest) {
         // Update database
         taskOperations.update.run(
           'completed',
-          100,
+          finalProgress,
           task?.startTime ? new Date(task.startTime).toISOString() : now,
           endTime,
           task?.totalUrls || 0,
@@ -240,7 +241,7 @@ export async function POST(request: NextRequest) {
         taskRunOperations.update.run(
           'completed',
           endTime,
-          100,
+          finalProgress,
           task?.totalUrls || 0,
           task?.scrapedUrls || 0,
           task?.failedUrls || 0,

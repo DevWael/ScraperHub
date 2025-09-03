@@ -295,7 +295,7 @@ export default function TaskDetailPage() {
                       </div>
                       <div className="ml-4">
                         <p className="text-sm font-medium text-gray-500">Scraped</p>
-                        <p className="text-2xl font-semibold text-gray-900">{task.scrapedUrls}</p>
+                        <p className="text-2xl font-semibold text-gray-900">{task.pagesScraped}</p>
                       </div>
                     </div>
                   </div>
@@ -306,7 +306,7 @@ export default function TaskDetailPage() {
                       </div>
                       <div className="ml-4">
                         <p className="text-sm font-medium text-gray-500">Images</p>
-                        <p className="text-2xl font-semibold text-gray-900">{task.downloadedImages}</p>
+                        <p className="text-2xl font-semibold text-gray-900">{task.imagesDownloaded}</p>
                       </div>
                     </div>
                   </div>

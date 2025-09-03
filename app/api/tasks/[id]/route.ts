@@ -33,7 +33,12 @@ export async function GET(
     return NextResponse.json({
       task: {
         ...task,
-        settings: JSON.parse(task.settings)
+        settings: JSON.parse(task.settings),
+        // Map database fields to frontend fields for consistency
+        pagesScraped: task.scrapedUrls || 0,
+        pagesFailed: task.failedUrls || 0,
+        imagesDownloaded: task.downloadedImages || 0,
+        totalUrls: task.totalUrls || 0
       },
       runs,
       scrapedPages,
