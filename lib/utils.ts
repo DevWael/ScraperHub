@@ -28,9 +28,20 @@ export function ensureDirectoryExists(dirPath: string): void {
 
 /**
  * Get the output directory path for a task
+ * Note: This function is kept for backward compatibility but the new structure
+ * uses domain/date_time format instead of taskId_run_number
  */
 export function getTaskOutputDir(taskId: string, runNumber: number): string {
   return path.join(process.cwd(), 'data', 'tasks', `${taskId}_run_${runNumber}`);
+}
+
+/**
+ * Get the output directory path for a task using the new domain/date_time structure
+ */
+export function getNewTaskOutputDir(domain: string, timestamp?: string): string {
+  const baseDirName = domain.replace(/\./g, '_');
+  const dateTime = timestamp || new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  return path.join(process.cwd(), 'data', 'tasks', baseDirName, dateTime);
 }
 
 /**

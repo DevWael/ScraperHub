@@ -103,7 +103,14 @@ export async function POST(request: NextRequest) {
     const path = require('path');
     
     const crawlerPath = path.join(process.cwd(), 'lib', 'crawler.js');
-    const outputDir = getTaskOutputDir(taskId, runNumber);
+    
+    // Create output directory structure: data/tasks/domain/date_time/
+    const urlObj = new URL(originalTask.url);
+    const baseDomain = urlObj.hostname;
+    const baseDirName = baseDomain.replace(/\./g, '_');
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19); // Format: YYYY-MM-DDTHH-MM-SS
+    const outputDir = path.join(process.cwd(), 'data', 'tasks', baseDirName, timestamp);
+    
     const child = spawn('node', [crawlerPath, '--url', originalTask.url, '--output', outputDir, '--format', 'md'], {
       stdio: ['pipe', 'pipe', 'pipe'],
       cwd: process.cwd()

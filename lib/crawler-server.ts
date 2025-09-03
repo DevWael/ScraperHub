@@ -12,14 +12,11 @@ export async function crawl(url: string, settings: TaskSettings, outputDir: stri
 		const baseDomain = urlObj.hostname;
 		const baseDirName = baseDomain.replace(/\./g, '_');
 		
-		// Create output directory structure
-		let finalOutputDir = outputDir || path.join('output', baseDirName);
-		let dirSuffix = 0;
-		const fs = require('fs-extra');
-		
-		while (await fs.pathExists(finalOutputDir)) {
-			dirSuffix++;
-			finalOutputDir = outputDir || path.join('output', `${baseDirName}-${dirSuffix}`);
+		// Create output directory structure: data/tasks/domain/date_time/
+		let finalOutputDir = outputDir;
+		if (!finalOutputDir) {
+			const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19); // Format: YYYY-MM-DDTHH-MM-SS
+			finalOutputDir = path.join('data', 'tasks', baseDirName, timestamp);
 		}
 		
 		// Initialize the Crawlee crawler
